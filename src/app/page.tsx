@@ -11,7 +11,7 @@ interface Todo {
 
 const Home: React.FC = () => {
     const [todos, setTodos] = useState<Todo[]>([]);
-    const [editingTodo, setEditingTodo] = useState<Todo | null>(null); 
+    const [editingTodo, setEditingTodo] = useState<Todo | null>(null);
 
     const fetchData = async () => {
         const data = await fetchTodos();
@@ -24,25 +24,29 @@ const Home: React.FC = () => {
 
     const handleTodoUpdate = async (todo: Todo) => {
         await updateTodo(todo);
-        setEditingTodo(null); 
+        setEditingTodo(null);
         fetchData();
     };
 
     const handleTodoDelete = async (id: number) => {
         await deleteTodo(id);
-        fetchData(); 
+        fetchData();
     };
 
     const handleEditClick = (todo: Todo) => {
-        setEditingTodo(todo); 
+        setEditingTodo(todo);
+    };
+
+    const handleTodoAdd = (newTodo: Todo) => {
+        setTodos((prevTodos) => [...prevTodos, newTodo]); 
     };
 
     return (
         <div className="container mx-auto p-4">
             <h1 className="text-2xl font-bold mb-4">TODO List</h1>
             <TodoForm 
-                onTodoAdded={fetchData} 
-                editingTodo={editingTodo || undefined}
+                onTodoAdded={handleTodoAdd}
+                editingTodo={editingTodo || undefined} 
                 onTodoUpdated={handleTodoUpdate} 
                 setEditingTodo={setEditingTodo} 
             />
@@ -53,7 +57,9 @@ const Home: React.FC = () => {
                             <input
                                 type="checkbox"
                                 checked={todo.isCompleted}
-                                onChange={() => handleTodoUpdate({ ...todo, isCompleted: !todo.isCompleted })}
+                                onChange={() => 
+                                    handleTodoUpdate({ ...todo, isCompleted: !todo.isCompleted })
+                                }
                             />
                             <span className={`ml-2 ${todo.isCompleted ? 'line-through' : ''}`}>
                                 {todo.title}

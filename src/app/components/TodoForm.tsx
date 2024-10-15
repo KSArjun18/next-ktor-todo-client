@@ -11,24 +11,26 @@ const TodoForm: React.FC<TodoFormProps> = ({
 
     useEffect(() => {
         if (editingTodo) {
-            setTitle(editingTodo.title); 
+            setTitle(editingTodo.title);
         }
     }, [editingTodo]);
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
+
         if (editingTodo) {
             onTodoUpdated({ ...editingTodo, title });
         } else {
-            
             const newTodo: Todo = { id: Date.now(), title, isCompleted: false };
-            onTodoAdded();
+            onTodoAdded(newTodo);
         }
-        setTitle('');
+
+        setTitle(''); 
+        setEditingTodo(null); 
     };
 
     const handleCancel = () => {
-        setEditingTodo(null); 
+        setEditingTodo(null);
         setTitle('');
     };
 

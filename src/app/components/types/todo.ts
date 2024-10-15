@@ -5,8 +5,8 @@ export interface Todo {
 }
 
 export interface TodoFormProps {
-    onTodoAdded: () => void;
-    onTodoUpdated: (todo: Todo) => void;
+    onTodoAdded: (newTodo: Todo) => void;
+    onTodoUpdated: (updatedTodo: Todo) => void;
     editingTodo?: Todo;
-    setEditingTodo: (todo: Todo | null) => void;
+    setEditingTodo: React.Dispatch<React.SetStateAction<Todo | null>>;
 }
