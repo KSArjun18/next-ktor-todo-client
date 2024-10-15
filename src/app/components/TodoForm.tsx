@@ -1,51 +1,59 @@
-import React, { useEffect, useState } from 'react';
-import { Todo } from './types/todo';
+import React, { useState, useEffect } from 'react';
+import { Todo, TodoFormProps } from './types/todo';
 
-interface TodoFormProps {
-    onTodoAdded: () => void;
-    editingTodo?: Todo | null; // Prop for editing
-    onTodoUpdated: (todo: Todo) => void; // Callback for updating
-    setEditingTodo: (todo: Todo | null) => void; // Function to clear editing state
-}
-
-const TodoForm: React.FC<TodoFormProps> = ({ onTodoAdded, editingTodo, onTodoUpdated, setEditingTodo }) => {
-    const [title, setTitle] = useState("");
+const TodoForm: React.FC<TodoFormProps> = ({
+    onTodoAdded,
+    onTodoUpdated,
+    editingTodo,
+    setEditingTodo,
+}) => {
+    const [title, setTitle] = useState('');
 
     useEffect(() => {
         if (editingTodo) {
-            setTitle(editingTodo.title); // Populate the title with the editing todo's title
+            setTitle(editingTodo.title); 
         }
     }, [editingTodo]);
 
-    const handleSubmit = async (e: React.FormEvent) => {
+    const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         if (editingTodo) {
-            // Update the existing todo
             onTodoUpdated({ ...editingTodo, title });
-            setEditingTodo(null); // Clear the editing state after submission
         } else {
-            // Add a new todo (Assuming you have the addTodo function)
-            const newTodo = { id: Date.now(), title, isCompleted: false }; // Example new todo object
-            // Call your addTodo function here
-            // await addTodo(newTodo);
-            onTodoAdded(); // Refresh the list after adding
+            
+            const newTodo: Todo = { id: Date.now(), title, isCompleted: false };
+            onTodoAdded();
         }
-        setTitle(""); // Clear input after submission
+        setTitle('');
+    };
+
+    const handleCancel = () => {
+        setEditingTodo(null); 
+        setTitle('');
     };
 
     return (
-        <form onSubmit={handleSubmit} className="flex mb-4">
+        <form onSubmit={handleSubmit} className="mb-4">
             <input
                 type="text"
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
-                className="border p-2 flex-grow"
+                className="border p-2 mr-2"
                 placeholder="Enter todo title"
                 required
             />
-            <button type="submit" className="bg-blue-500 text-white p-2 ml-2">
-                {editingTodo ? "Update Todo" : "Add Todo"}
+            <button type="submit" className="bg-green-500 text-white p-2">
+                {editingTodo ? 'Update Todo' : 'Add Todo'}
             </button>
+            {editingTodo && (
+                <button
+                    type="button"
+                    onClick={handleCancel}
+                    className="bg-gray-500 text-white p-2 ml-2"
+                >
+                    Cancel
+                </button>
+            )}
         </form>
     );
 };

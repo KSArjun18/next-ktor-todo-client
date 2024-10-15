@@ -1,23 +1,16 @@
 import axios from 'axios';
 
-const API_URL = 'http://localhost:8080/todos'; // Replace with your backend URL if needed
+const BASE_URL = 'http://localhost:8080/todos'; 
 
 export const fetchTodos = async () => {
-    const response = await axios.get(API_URL);
-    return response.data;
-};
-
-export const createTodo = async (todo: { title: string; isCompleted: boolean }) => {
-    const response = await axios.post(API_URL, todo);
+    const response = await axios.get(BASE_URL);
     return response.data;
 };
 
 export const updateTodo = async (todo: { id: number; title: string; isCompleted: boolean }) => {
-    const response = await axios.put(`${API_URL}/${todo.id}`, todo);
-    return response.data;
+    await axios.put(`${BASE_URL}/${todo.id}`, todo);
 };
 
 export const deleteTodo = async (id: number) => {
-    await axios.delete(`${API_URL}/${id}`);
+    await axios.delete(`${BASE_URL}/${id}`);
 };
-    
